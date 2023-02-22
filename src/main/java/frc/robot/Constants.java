@@ -25,7 +25,7 @@ public class Constants {;
  
     } //DriveTrain 
     public class DriveTrain {
-      public static final double speedmult = 0.75;// slow down math boy 
+      public static final double speedmult = 0.30;// slow down math boy 
       public class Left{
         public static final boolean isInverted = true; //invert left side
       } 
