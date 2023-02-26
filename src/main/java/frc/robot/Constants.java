@@ -17,8 +17,8 @@ public class Constants {;
 
     
     }
-// Ids of SparkMax
-  public class SparkMax  {
+// Ids of TalonSRX
+  public class TalonSRX  {
      public static final int driveTopLeft = 5;
      public static final int driveTopRight = 6; 
   }
@@ -40,7 +40,9 @@ public class Constants {;
     public static final int Joy = 0;
     public static final double maxband = 0.90;
     public static final double minband = 0.10;
-  }}
+  }
+
+}  
   
   
     

@@ -4,8 +4,8 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -28,8 +27,8 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   private final WPI_VictorSPX driveLeftrear = new WPI_VictorSPX(Constants.IDs.Victor.driveLeftrear);
   private final WPI_VictorSPX driveLeftfront = new WPI_VictorSPX(Constants.IDs.Victor.driveLeftfront);
-  private final CANSparkMax driveTopLeft = new CANSparkMax(Constants.IDs.SparkMax.driveTopLeft,null );
-  private final CANSparkMax driveTopRight = new CANSparkMax(Constants.IDs.SparkMax.driveTopRight,null);
+  private final WPI_TalonSRX driveTopLeft = new WPI_TalonSRX(Constants.IDs.TalonSRX.driveTopLeft);
+  private final WPI_TalonSRX driveTopRight = new WPI_TalonSRX(Constants.IDs.TalonSRX.driveTopRight);
   private final WPI_VictorSPX driveRightrear = new WPI_VictorSPX(Constants.IDs.Victor.driveRightrear);
   private final WPI_VictorSPX driveRightfront = new WPI_VictorSPX(Constants.IDs.Victor.driveRightfront);
   private final Joystick joy = new Joystick(Constants.OI.Joy);
