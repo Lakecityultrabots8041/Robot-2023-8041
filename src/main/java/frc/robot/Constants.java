@@ -24,7 +24,7 @@ public class Constants {;
       public static final int driveTopLeftId = 5;
       public static final int driveTopRightId = 6; 
       public static final int armControllerId1 = 7;
-      public static final int armControllerId2 = 8;
+     
       public static final int armExtendControllerId = 9;
     }
 
@@ -66,7 +66,7 @@ public class Constants {;
       //Talon Tuning
       public static final int motorId = IDs.TalonSRX.armControllerId1;
       public static final boolean isInverted = true;
-      public static final boolean sensorPhase = false;
+      public static final boolean sensorPhase = true;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
       //PID Tuning
       public static final double kP = 0.2;
@@ -82,7 +82,7 @@ public class Constants {;
     }      
     public class Motor2 {
       //Talon Tuning
-      public static final int motorId = IDs.TalonSRX.armControllerId2;
+      public static final int motorId = IDs.Victor.armControllerId2;
       public static final boolean isInverted = true;
       public static final boolean sensorPhase = false;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
@@ -100,7 +100,7 @@ public class Constants {;
     }   
     public class Extend {
       public static final int motorId = IDs.TalonSRX.armExtendControllerId;
-      public static final boolean isInverted = true;
+      public static final boolean isInverted = false;
       public static final boolean sensorPhase = false;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
       //PID Tuning
