@@ -83,6 +83,7 @@ public class Robot extends TimedRobot {
     driveRightRear.setInverted(InvertType.FollowMaster);
 
     //Arm Master
+    m_arm1.setSelectedSensorPosition(0);
     m_arm1.configFactoryDefault();
     m_arm1.set(ControlMode.PercentOutput, 0.0);
     m_arm1.setNeutralMode(NeutralMode.Brake);
@@ -108,6 +109,7 @@ public class Robot extends TimedRobot {
     m_arm2.follow(m_arm1);
     m_arm2.setInverted(InvertType.OpposeMaster);
     //Arm Extension 
+    m_extend.setSelectedSensorPosition(0);
     m_extend.configFactoryDefault();
     m_extend.set(ControlMode.PercentOutput, 0.0);
     m_extend.setNeutralMode(NeutralMode.Brake);
@@ -236,6 +238,8 @@ public class Robot extends TimedRobot {
       m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.HPShelf);
       m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.HPShelf);
     }
+    //Return home
+    
   }
   
   /** This function is called once when the robot is disabled. */
