@@ -65,7 +65,7 @@ public class Constants {;
     public class Motor1 {
       //Talon Tuning
       public static final int motorId = IDs.TalonSRX.armControllerId1;
-      public static final boolean isInverted = true;
+      public static final boolean isInverted = false ;
       public static final boolean sensorPhase = true;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
       //PID Tuning
