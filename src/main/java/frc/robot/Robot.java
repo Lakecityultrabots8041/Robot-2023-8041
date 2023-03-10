@@ -238,7 +238,7 @@ public class Robot extends TimedRobot {
       m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.HPShelf);
       m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.HPShelf);
     }
-    //Return home
+   
     
   }
   
