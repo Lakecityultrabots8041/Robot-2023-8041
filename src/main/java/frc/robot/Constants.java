@@ -42,7 +42,7 @@ public class Constants {;
       public static final double kSpeedMult = 1.0; // slow down math boy 
       public static final double kTurnMult = 1.0; //reduce rate of turn
       public class Left{
-        public static final boolean isInverted = true; //invert left side
+        public static final boolean isInverted = false; //invert left side
       } 
       public class Right {
         public static final boolean isInverted = !Left.isInverted;
@@ -72,7 +72,7 @@ public class Constants {;
       public static final double kP = 0.2;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
-      public static final double kF = 0.2;
+      public static final double kF = 0.35;
       public static final int kIZone = 0;
       public static final double kNeutralDeadband = 0.001;
       public static final double kPeakOutput = 1.0;
@@ -90,7 +90,7 @@ public class Constants {;
       public static final double kP = 0.2;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
-      public static final double kF = 0.2;
+      public static final double kF = 0.35;
       public static final int kIZone = 0;
       public static final double kNeutralDeadband = 0.001;
       public static final double kPeakOutput = 1.0;
