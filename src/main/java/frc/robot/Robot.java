@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -46,11 +45,18 @@ public class Robot extends TimedRobot {
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
   private final DifferentialDrive drive = new DifferentialDrive(driveTopLeft, driveTopRight);
   private final DoubleSolenoid m_gearShift = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.IDs.Air.driveShiftHighId, Constants.IDs.Air.driveShiftLowId);
-  private final Solenoid m_gripper = new Solenoid(PneumaticsModuleType.REVPH, Constants.IDs.Air.gripperSolenoidId);
+  private final DoubleSolenoid m_gripper = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.IDs.Air.gripperOpenSolenoidId, Constants.IDs.Air.gripperClosedSolenoidId);
   private final WPI_TalonSRX m_arm1 = new WPI_TalonSRX(Constants.IDs.TalonSRX.armControllerId1);
-  private final WPI_TalonSRX m_arm2 = new WPI_TalonSRX(Constants.IDs.Victor.armControllerId2);
+  private final WPI_VictorSPX m_arm2 = new WPI_VictorSPX(Constants.IDs.Victor.armControllerId2);
   private final WPI_TalonSRX m_extend = new WPI_TalonSRX(Constants.IDs.TalonSRX.armExtendControllerId);
   private final Timer m_timer = new Timer();
+  private final Timer m_armTimer = new Timer();
+  private final Timer m_armDownTimer = new Timer();
+  private final Timer m_extendTimer = new Timer();
+  private double m_extendTarget = 0.0;
+  private double m_extendDelay = 0.0;
+  private double m_armDownTarget = 0.0;
+  private double m_armDownDelay = 1.0;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -107,29 +113,32 @@ public class Robot extends TimedRobot {
     //Arm Follower
     m_arm2.configFactoryDefault();
     m_arm2.follow(m_arm1);
-    m_arm2.setInverted(InvertType.OpposeMaster);
+    m_arm2.setInverted((Constants.Arm.Motor2.isInverted)?InvertType.OpposeMaster:InvertType.FollowMaster);
     //Arm Extension 
-    m_extend.setSelectedSensorPosition(0);
     m_extend.configFactoryDefault();
+    m_extend.configForwardSoftLimitEnable(true);
+    m_extend.configForwardSoftLimitThreshold(Constants.Arm.Extend.Positions.SoftFwdLimit);
+    m_extend.setSelectedSensorPosition(0);
     m_extend.set(ControlMode.PercentOutput, 0.0);
     m_extend.setNeutralMode(NeutralMode.Brake);
     m_extend.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 30);
-    m_extend.configNeutralDeadband(Constants.Arm.Motor1.kNeutralDeadband);
-    m_extend.setSensorPhase(Constants.Arm.Motor1.sensorPhase);
-    m_extend.setInverted(Constants.Arm.Motor1.isInverted);
+    m_extend.configNeutralDeadband(Constants.Arm.Extend.kNeutralDeadband);
+    m_extend.setSensorPhase(Constants.Arm.Extend.sensorPhase);
+    m_extend.setInverted(Constants.Arm.Extend.isInverted);
     m_extend.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 30);
     m_extend.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);
     m_extend.configNominalOutputForward(0, 30);
     m_extend.configNominalOutputReverse(0, 30);
-    m_extend.configPeakOutputForward(Constants.Arm.Motor1.kPeakOutput, 30);
-    m_extend.configPeakOutputReverse(-Constants.Arm.Motor1.kPeakOutput, 30);
+    m_extend.configPeakOutputForward(Constants.Arm.Extend.kPeakOutput, 30);
+    m_extend.configPeakOutputReverse(-Constants.Arm.Extend.kPeakOutput, 30);
     m_extend.selectProfileSlot(0, 0); 
-    m_extend.config_kF(0, Constants.Arm.Motor1.kF, 30);
-    m_extend.config_kP(0, Constants.Arm.Motor1.kP, 30);
-    m_extend.config_kI(0, Constants.Arm.Motor1.kI, 30);
-    m_extend.config_kD(0, Constants.Arm.Motor1.kD, 30);
-    m_extend.configMotionCruiseVelocity(Constants.Arm.Motor1.kCruise, 30);
-    m_extend.configMotionAcceleration(Constants.Arm.Motor1.kAccel, 30);
+    m_extend.config_kF(0, Constants.Arm.Extend.kF, 30);
+    m_extend.config_kP(0, Constants.Arm.Extend.kP, 30);
+    m_extend.config_kI(0, Constants.Arm.Extend.kI, 30);
+    m_extend.config_kD(0, Constants.Arm.Extend.kD, 30);
+    m_extend.configMotionCruiseVelocity(Constants.Arm.Extend.kCruise, 30);
+    m_extend.configMotionAcceleration(Constants.Arm.Extend.kAccel, 30);
+    m_extend.setSelectedSensorPosition(0);
 
     m_gearShift.set(DoubleSolenoid.Value.kForward);
 
@@ -188,14 +197,16 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    m_arm1.setSelectedSensorPosition(0); //TODO: DISABLE THIS FOR COMP!!! TESTING ONLY
+  }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() { 
     drive.arcadeDrive(
       OI.deadband(joy.getRawAxis(Constants.Joy.axis_vertical)) * Constants.DriveTrain.kSpeedMult,
-      OI.deadband(joy.getRawAxis(Constants.Joy.axis_horizontal)) * Constants.DriveTrain.kTurnMult
+      OI.deadband(joy.getRawAxis(Constants.Joy.axis_rotate)) * Constants.DriveTrain.kTurnMult
     );
 
     //Handle shifting the drivetrain
@@ -210,33 +221,71 @@ public class Robot extends TimedRobot {
     //Handle opening/closing the gripper
     if(joy.getRawButtonPressed(Constants.Controls.gripperActuate)) {
       System.out.println("teleopPeriodic: Open Gripper");
-      m_gripper.set(Constants.Gripper.kOpenState);
+      m_gripper.set(DoubleSolenoid.Value.kForward);
     } else if (joy.getRawButtonReleased(Constants.Controls.gripperActuate)) {
       System.out.println("teleopPeriodic: Close Gripper");
-      m_gripper.set(!Constants.Gripper.kOpenState);
+      m_gripper.set(DoubleSolenoid.Value.kReverse);
     }
 
     //Handle moving the arm
+    if(m_armTimer.get()>=1.5) {
+      m_arm1.set(ControlMode.Disabled, 0.0);
+      m_armTimer.stop();
+      m_armTimer.reset();
+    }
+    if(m_armDownTimer.get()>=m_armDownDelay) {
+      m_arm1.set(ControlMode.MotionMagic, m_armDownTarget);
+      m_armTimer.reset();
+      m_armTimer.start();
+      m_armDownTimer.stop();
+      m_armDownTimer.reset();
+    }
+    if(m_extendTimer.get()>=m_extendDelay) {
+      m_extend.set(ControlMode.MotionMagic, m_extendTarget);
+      m_extendTimer.stop();
+      m_extendTimer.reset();
+    }
     if(joy.getRawButtonPressed(Constants.Controls.armDown)) {
       System.out.println("teleopPeriodic: Arm Down");
-      m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.Home);
+      // m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.Home);
       m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.Home);
+      // m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.Floor);
+      m_armDownTarget = Constants.Arm.Extend.Positions.Home;
+      m_armDownDelay = 1.0;
+      m_armDownTimer.reset();
+      m_armDownTimer.start();
     } else if (joy.getRawButtonPressed(Constants.Controls.armScoreHigh)) {
       System.out.println("teleopPeriodic: Scoring High");
       m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.ScoreHigh);
-      m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.ScoreHigh);
+      m_extendTarget = Constants.Arm.Extend.Positions.ScoreHigh;
+      m_extendDelay = 1.0;
+      m_extendTimer.reset();
+      m_extendTimer.start();
+      // m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.ScoreHigh);
     } else if(joy.getRawButtonPressed(Constants.Controls.armScoreLow)) {
       System.out.println("teleopPeriodic: Scoring Low");
       m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.ScoreLow);
-      m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.ScoreLow);
+      m_extendTarget = Constants.Arm.Extend.Positions.ScoreLow;
+      m_extendDelay = 1.0;
+      m_extendTimer.reset();
+      m_extendTimer.start();
+      // m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.ScoreLow);
     } else if(joy.getRawButtonPressed(Constants.Controls.armFloor)) {
       System.out.println("teleopPeriodic: Arm To The Floor");
       m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.Floor);
-      m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.Floor);
+      m_extendTarget = Constants.Arm.Extend.Positions.Floor;
+      m_extendDelay = 1.0;
+      m_extendTimer.reset();
+      m_extendTimer.start();
+      // m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.Floor);
     } else if (joy.getRawButtonPressed(Constants.Controls.armHPShelf)) {
       System.out.println("teleopPeriodic: FEED ME HUMAN");
       m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.HPShelf);
-      m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.HPShelf);
+      m_extendTarget = Constants.Arm.Extend.Positions.HPShelf;
+      m_extendDelay = 1.0;
+      m_extendTimer.reset();
+      m_extendTimer.start();
+      // m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.HPShelf);
     }
    
     
@@ -246,6 +295,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_gearShift.set(DoubleSolenoid.Value.kForward);
+    m_gripper.set(DoubleSolenoid.Value.kReverse);
     m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.Home);
     m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.Home);
   }
