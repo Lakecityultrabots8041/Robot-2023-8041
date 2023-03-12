@@ -31,8 +31,9 @@ public class Constants {;
     //Solenoids
     public class Air {
       public static final int driveShiftHighId = 0;
-      public static final int driveShiftLowId = 1;
-      public static final int gripperSolenoidId = 2;
+      public static final int driveShiftLowId = 2;
+      public static final int gripperOpenSolenoidId = 6;
+      public static final int gripperClosedSolenoidId = 4;
     }
  
     } 
@@ -56,11 +57,12 @@ public class Constants {;
 
   public class Arm {
     public class Positions { 
-      public static final double ScoreHigh = 5000;
-      public static final double ScoreLow = 1000;
-      public static final double HPShelf = 3000;
-      public static final double Floor = 1000;
-      public static final double Home = 0;
+      public static final double ScoreHigh = 3400;
+      public static final double ScoreLow = 2450;
+      public static final double HPShelf = 3400;
+      public static final double Floor = 650;
+      public static final double Home = 50;
+      public static final double SoftFwdLimit = 5200;
     }
     public class Motor1 {
       //Talon Tuning
@@ -69,15 +71,15 @@ public class Constants {;
       public static final boolean sensorPhase = false;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
       //PID Tuning
-      public static final double kP = 0.2;
+      public static final double kP = 2.0;
       public static final double kI = 0.0;
-      public static final double kD = 0.0;
-      public static final double kF = 0.4;
+      public static final double kD = 0.035; //0125;
+      public static final double kF = 0.3;
       public static final int kIZone = 0;
       public static final double kNeutralDeadband = 0.001;
       public static final double kPeakOutput = 1.0;
       public static final double kCruise = 1000;
-      public static final double kAccel = 2000;
+      public static final double kAccel = 700;
       // public final PIDGains gains = new PIDGains(kP, kI, kD, kF, kIZone, kNeutralDeadband, kPeakOutput, kCruise, kAccel);
     }      
     public class Motor2 {
@@ -90,18 +92,18 @@ public class Constants {;
       public static final double kP = 0.2;
       public static final double kI = 0.0;
       public static final double kD = 0.0;
-      public static final double kF = 0.4;
+      public static final double kF = 0.2;
       public static final int kIZone = 0;
       public static final double kNeutralDeadband = 0.001;
       public static final double kPeakOutput = 1.0;
-      public static final double kCruise = 1000;
-      public static final double kAccel = 2000;
+      public static final double kCruise = 500;
+      public static final double kAccel = 1000;
       // public final PIDGains gains = new PIDGains(kP, kI, kD, kF, kIZone, kNeutralDeadband, kPeakOutput, kCruise, kAccel);
     }   
     public class Extend {
       public static final int motorId = IDs.TalonSRX.armExtendControllerId;
       public static final boolean isInverted = false;
-      public static final boolean sensorPhase = false;
+      public static final boolean sensorPhase = true;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
       //PID Tuning
       public static final double kP = 0.2;
@@ -115,11 +117,12 @@ public class Constants {;
       public static final double kAccel = 2000;
       // public final PIDGains gains = new PIDGains(kP, kI, kD, kF, kIZone, kNeutralDeadband, kPeakOutput, kCruise, kAccel);
       public class Positions { 
-        public static final double ScoreHigh = 5000;
-        public static final double ScoreLow = 1000;
+        public static final double ScoreHigh = 13200;
+        public static final double ScoreLow = 7600;
         public static final double HPShelf = 3000;
-        public static final double Floor = 1000;
+        public static final double Floor = 5400;
         public static final double Home = 0;
+        public static final double SoftFwdLimit = 14500;
       }
     }         
   }
