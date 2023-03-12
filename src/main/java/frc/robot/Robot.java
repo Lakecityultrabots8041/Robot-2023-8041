@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
     //Setup the Talons every robot init
     LiveWindow.disableAllTelemetry();
     UsbCamera camera = CameraServer.startAutomaticCapture();
-    camera.setResolution(640, 480);
+    camera.setResolution(320, 240);
 
     //Left Master
     driveTopLeft.configFactoryDefault();
