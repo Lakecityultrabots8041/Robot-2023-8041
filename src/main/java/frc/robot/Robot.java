@@ -191,7 +191,10 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     switch (m_autoSelected) {
       case kCustomAuto:
-        // Put custom auto code here
+        if (Math.abs(m_gyro.getPitch())>=3.5) {
+          double speed = Math.copySign(0.2,m_gyro.getPitch());
+          drive.tankDrive(speed,speed);
+        }
         break;
       case kDefaultAuto:
       default:
