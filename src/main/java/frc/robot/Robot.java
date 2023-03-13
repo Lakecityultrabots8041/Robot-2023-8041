@@ -213,9 +213,12 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() { 
     drive.arcadeDrive(
-      OI.deadband(joy.getRawAxis(Constants.Joy.axis_vertical)) * Constants.DriveTrain.kSpeedMult,
-      OI.deadband(joy.getRawAxis(Constants.Joy.axis_rotate)) * Constants.DriveTrain.kTurnMult
+      OI.deadband(joy.getRawAxis(Constants.Xbox.RightJoystick)) * Constants.DriveTrain.kSpeedMult,
+      OI.deadband(-joy.getRawAxis(Constants.Xbox.LeftJoyStick)) * Constants.DriveTrain.kTurnMult 
     );
+    
+    
+    
 
     //Handle shifting the drivetrain
     if(joy.getRawButtonPressed(Constants.Controls.driveShiftHigh)) {
