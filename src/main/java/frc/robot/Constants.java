@@ -149,16 +149,29 @@ public class Constants {;
     public static final int lefthand7 = 7; //top-left base buttons
     public static final int lefthand8 = 8; //top-right base buttons
   } 
+   public class Xbox { 
+    public static final int RightJoystick = 1;
+    public static final int LT = 2;
+    public static final int LeftJoyStick = 4;
+    public static final int BackRight = 10;
+    public static final int BackLeft = 9;
+    public static final int X = 3; 
+    public static final int Y= 4; 
+    public static final int LB = 5; 
+    public static final int RB = 6; 
+    public static final int B = 2; 
+    public static final int A = 1; 
+   } 
 
-  public class Controls {
-    public static final int driveShiftHigh = Joy.lefthand7;
-    public static final int driveShiftLow = Joy.lefthand8;
-    public static final int gripperActuate = Joy.trigger_button;
-    public static final int armDown = Joy.side_button;
-    public static final int armScoreHigh = Joy.thumb5;
-    public static final int armScoreLow = Joy.thumb3;
-    public static final int armHPShelf = Joy.thumb6;
-    public static final int armFloor = Joy.thumb4;
+    public class Controls {
+    public static final int driveShiftHigh = Xbox.LB;
+    public static final int driveShiftLow = Xbox.RB;
+    public static final int gripperActuate = Xbox.BackRight;
+    public static final int armDown = Xbox.BackLeft;
+    public static final int armScoreHigh = Xbox.Y;
+    public static final int armScoreLow = Xbox.X;
+    public static final int armHPShelf = Xbox.B;
+    public static final int armFloor = Xbox.A;
   }
 
 }
