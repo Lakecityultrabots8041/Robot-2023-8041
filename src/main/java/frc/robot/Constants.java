@@ -16,16 +16,21 @@ public class Constants {;
       public static final int driveLeftfrontId = 2;
       public static final int driveRightrearId = 3;
       public static final int driveRightfrontId = 4;
-      public static final int armControllerId2 = 8;
+      //public static final int armControllerId2 = 8;
     }
   
     // Ids of TalonSRX
     public class TalonSRX  {
       public static final int driveTopLeftId = 5;
       public static final int driveTopRightId = 6; 
-      public static final int armControllerId1 = 7;
+      //public static final int armControllerId1 = 7;
      
       public static final int armExtendControllerId = 9;
+    }
+    // Ids of Falcons
+    public class TalonFX {
+     public static final int armControllerId1 = 7;
+     public static final int armControllerId2 = 8;
     }
 
     //Solenoids
@@ -66,7 +71,7 @@ public class Constants {;
     }
     public class Motor1 {
       //Talon Tuning
-      public static final int motorId = IDs.TalonSRX.armControllerId1;
+      public static final int motorId = IDs.TalonFX.armControllerId1;
       public static final boolean isInverted = false ;
       public static final boolean sensorPhase = false;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
@@ -84,7 +89,7 @@ public class Constants {;
     }      
     public class Motor2 {
       //Talon Tuning
-      public static final int motorId = IDs.Victor.armControllerId2;
+      public static final int motorId = IDs.TalonFX.armControllerId2;
       public static final boolean isInverted = true;
       public static final boolean sensorPhase = false;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);

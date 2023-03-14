@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
@@ -48,8 +49,8 @@ public class Robot extends TimedRobot {
   private final DifferentialDrive drive = new DifferentialDrive(driveTopLeft, driveTopRight);
   private final DoubleSolenoid m_gearShift = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.IDs.Air.driveShiftHighId, Constants.IDs.Air.driveShiftLowId);
   private final DoubleSolenoid m_gripper = new DoubleSolenoid(PneumaticsModuleType.REVPH, Constants.IDs.Air.gripperOpenSolenoidId, Constants.IDs.Air.gripperClosedSolenoidId);
-  private final WPI_TalonSRX m_arm1 = new WPI_TalonSRX(Constants.IDs.TalonSRX.armControllerId1);
-  private final WPI_VictorSPX m_arm2 = new WPI_VictorSPX(Constants.IDs.Victor.armControllerId2);
+  private final WPI_TalonFX m_arm1 = new WPI_TalonFX(Constants.IDs.TalonFX.armControllerId1);
+  private final WPI_TalonFX m_arm2 = new WPI_TalonFX(Constants.IDs.TalonFX.armControllerId2);
   private final WPI_TalonSRX m_extend = new WPI_TalonSRX(Constants.IDs.TalonSRX.armExtendControllerId);
   private final Timer m_timer = new Timer();
   private final Timer m_armTimer = new Timer();
@@ -214,7 +215,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() { 
     drive.arcadeDrive(
       OI.deadband(joy.getRawAxis(Constants.Xbox.RightJoystick)) * Constants.DriveTrain.kSpeedMult,
-      OI.deadband(-joy.getRawAxis(Constants.Xbox.LeftJoyStick)) * Constants.DriveTrain.kTurnMult 
+      OI.deadband(joy.getRawAxis(Constants.Xbox.LeftJoyStick)) * Constants.DriveTrain.kTurnMult 
     );
     
     

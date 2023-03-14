@@ -10,7 +10,7 @@ public class OI {
   public static double deadband(double value) { 
      double direction = Math.signum(value);
     value = (Math.abs(value) > Constants.OI.maxband) ? direction * 1.0 : value; //over max 
-    value = (Math.abs(value) < Constants.OI.minband) ? direction * 0.0 : value; // less than less 
+    value = (Math.abs(value) < Constants.OI.minband) ? direction * 0.25 : value; // less than less 
        return value;
 }
   
