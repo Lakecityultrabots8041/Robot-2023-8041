@@ -95,11 +95,10 @@ public class Robot extends TimedRobot {
     driveRightRear.setInverted(InvertType.FollowMaster);
 
     //Arm Master
-    m_arm1.setSelectedSensorPosition(0);
     m_arm1.configFactoryDefault();
     m_arm1.set(ControlMode.PercentOutput, 0.0);
     m_arm1.setNeutralMode(NeutralMode.Brake);
-    m_arm1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 30);
+    m_arm1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
     m_arm1.configNeutralDeadband(Constants.Arm.Motor1.kNeutralDeadband);
     m_arm1.setSensorPhase(Constants.Arm.Motor1.sensorPhase);
     m_arm1.setInverted(Constants.Arm.Motor1.isInverted);
@@ -116,6 +115,7 @@ public class Robot extends TimedRobot {
     m_arm1.config_kD(0, Constants.Arm.Motor1.kD, 30);
     m_arm1.configMotionCruiseVelocity(Constants.Arm.Motor1.kCruise, 30);
     m_arm1.configMotionAcceleration(Constants.Arm.Motor1.kAccel, 30);
+    m_arm1.setSelectedSensorPosition(0);
     //Arm Follower
     m_arm2.configFactoryDefault();
     m_arm2.follow(m_arm1);
