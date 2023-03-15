@@ -95,8 +95,9 @@ public class Robot extends TimedRobot {
     driveRightRear.setInverted(InvertType.FollowMaster);
 
     //Arm Master
-    m_arm1.setSelectedSensorPosition(0);
     m_arm1.configFactoryDefault();
+    // m_arm1.setSelectedSensorPosition(0);
+    m_arm1.getSensorCollection().setIntegratedSensorPosition(0, 0);
     m_arm1.set(ControlMode.PercentOutput, 0.0);
     m_arm1.setNeutralMode(NeutralMode.Brake);
     m_arm1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
