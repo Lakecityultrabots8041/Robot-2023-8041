@@ -62,12 +62,12 @@ public class Constants {;
 
   public class Arm {
     public class Positions { 
-      public static final double ScoreHigh = 3400;
-      public static final double ScoreLow = 2450;
-      public static final double HPShelf = 3400;
-      public static final double Floor = 650;
+      public static final double ScoreHigh = 2100;
+      public static final double ScoreLow = 1050;
+      public static final double HPShelf = 2250;
+      public static final double Floor = 700;
       public static final double Home = 50;
-      public static final double SoftFwdLimit = 5200;
+      public static final double SoftFwdLimit = 2650;
     }
     public class Motor1 {
       //Talon Tuning
@@ -125,7 +125,7 @@ public class Constants {;
         public static final double ScoreHigh = 13200;
         public static final double ScoreLow = 7600;
         public static final double HPShelf = 3000;
-        public static final double Floor = 5400;
+        public static final double Floor = 12000;
         public static final double Home = 0;
         public static final double SoftFwdLimit = 14500;
       }
