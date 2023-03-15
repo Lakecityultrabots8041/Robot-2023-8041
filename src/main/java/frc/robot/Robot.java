@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
     m_arm1.setNeutralMode(NeutralMode.Brake);
     m_arm1.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
     m_arm1.configNeutralDeadband(Constants.Arm.Motor1.kNeutralDeadband);
-    // m_arm1.setSensorPhase(Constants.Arm.Motor1.sensorPhase);
+    m_arm1.setSensorPhase(Constants.Arm.Motor1.sensorPhase);
     m_arm1.setInverted(Constants.Arm.Motor1.isInverted);
     m_arm1.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, 30);
     m_arm1.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 30);

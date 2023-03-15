@@ -29,8 +29,8 @@ public class Constants {;
     }
     // Ids of Falcons
     public class TalonFX {
-     public static final int armControllerId1 = 7;
-     public static final int armControllerId2 = 8;
+     public static final int armControllerId1 = 8;
+     public static final int armControllerId2 = 7;
     }
 
     //Solenoids
