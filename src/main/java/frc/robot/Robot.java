@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("Gyro",m_gyro.getFusedHeading());
     // SmartDashboard.putBoolean("High Gear",m_gearShift.getFwdChannel());
-    SmartDashboard.putNumber("Arm Position",m_arm1.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Arm Position",m_arm1.getSensorCollection().getIntegratedSensorPosition());
     SmartDashboard.putNumber("Extend Position",m_extend.getSelectedSensorPosition());
   }
 
