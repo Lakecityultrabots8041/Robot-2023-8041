@@ -120,9 +120,10 @@ public class Robot extends TimedRobot {
     m_arm1.configMotionAcceleration(Constants.Arm.Motor1.kAccel, 30);
     //Arm Follower
     m_arm2.configFactoryDefault();
-    m_arm2.set(TalonFXControlMode.Follower,m_arm1.getDeviceID());
+    m_arm2.set(TalonFXControlMode.Follower,m_arm1.getDeviceID());  
     m_arm2.setInverted((Constants.Arm.Motor2.isInverted)?InvertType.OpposeMaster:InvertType.FollowMaster);
     //Arm Extension 
+    m_extend.setSelectedSensorPosition(0);
     m_extend.configFactoryDefault();
     m_extend.configForwardSoftLimitEnable(true);
     m_extend.configForwardSoftLimitThreshold(Constants.Arm.Extend.Positions.SoftFwdLimit);
@@ -146,7 +147,7 @@ public class Robot extends TimedRobot {
     m_extend.config_kD(0, Constants.Arm.Extend.kD, 30);
     m_extend.configMotionCruiseVelocity(Constants.Arm.Extend.kCruise, 30);
     m_extend.configMotionAcceleration(Constants.Arm.Extend.kAccel, 30);
-    m_extend.setSelectedSensorPosition(0);
+    
 
     m_gearShift.set(DoubleSolenoid.Value.kForward);
 
@@ -216,7 +217,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() { 
     drive.arcadeDrive(
-      OI.deadband(joy.getRawAxis(-Constants.Xbox.RightJoystick)) * Constants.DriveTrain.kSpeedMult,
+      OI.deadband(joy.getRawAxis(Constants.Xbox.RightJoystick)) * Constants.DriveTrain.kSpeedMult,
       OI.deadband(joy.getRawAxis(Constants.Xbox.LeftJoyStick)) * Constants.DriveTrain.kTurnMult 
     );
     
