@@ -72,7 +72,7 @@ public class Constants {;
     public class Motor1 {
       //Talon Tuning
       public static final int motorId = IDs.TalonFX.armControllerId1;
-      public static final boolean isInverted = false ;
+      public static final boolean isInverted = true ;
       public static final boolean sensorPhase = false;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
       //PID Tuning
@@ -90,7 +90,7 @@ public class Constants {;
     public class Motor2 {
       //Talon Tuning
       public static final int motorId = IDs.TalonFX.armControllerId2;
-      public static final boolean isInverted = true;
+      public static final boolean isInverted = false;
       public static final boolean sensorPhase = false;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
       //PID Tuning
@@ -140,7 +140,7 @@ public class Constants {;
   } 
 
   //Logitech Extreme 3d pro
-  public class Joy {
+  /*public class Joy {
     public static final int axis_horizontal = 0;
     public static final int axis_vertical = 1;
     public static final int axis_rotate = 2;
@@ -153,7 +153,7 @@ public class Constants {;
     public static final int thumb6 = 6; //top-right
     public static final int lefthand7 = 7; //top-left base buttons
     public static final int lefthand8 = 8; //top-right base buttons
-  } 
+  } */
    public class Xbox { 
     public static final int RightJoystick = 1;
     public static final int LT = 2;

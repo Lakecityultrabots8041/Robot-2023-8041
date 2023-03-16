@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -119,7 +120,7 @@ public class Robot extends TimedRobot {
     m_arm1.configMotionAcceleration(Constants.Arm.Motor1.kAccel, 30);
     //Arm Follower
     m_arm2.configFactoryDefault();
-    m_arm2.follow(m_arm1);
+    m_arm2.set(TalonFXControlMode.Follower,m_arm1.getDeviceID());
     m_arm2.setInverted((Constants.Arm.Motor2.isInverted)?InvertType.OpposeMaster:InvertType.FollowMaster);
     //Arm Extension 
     m_extend.configFactoryDefault();
@@ -208,14 +209,14 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    m_arm1.setSelectedSensorPosition(0); //TODO: DISABLE THIS FOR COMP!!! TESTING ONLY
+     
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() { 
     drive.arcadeDrive(
-      OI.deadband(joy.getRawAxis(Constants.Xbox.RightJoystick)) * Constants.DriveTrain.kSpeedMult,
+      OI.deadband(joy.getRawAxis(-Constants.Xbox.RightJoystick)) * Constants.DriveTrain.kSpeedMult,
       OI.deadband(joy.getRawAxis(Constants.Xbox.LeftJoyStick)) * Constants.DriveTrain.kTurnMult 
     );
     
