@@ -72,8 +72,8 @@ public class Constants {;
     public class Motor1 {
       //Talon Tuning
       public static final int motorId = IDs.TalonFX.armControllerId1;
-      public static final boolean isInverted = false;
-      public static final boolean sensorPhase = false;
+      public static final boolean isInverted = true;
+      public static final boolean sensorPhase = true;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
       //PID Tuning
       public static final double kP = 2.0;
@@ -83,8 +83,8 @@ public class Constants {;
       public static final int kIZone = 0;
       public static final double kNeutralDeadband = 0.001;
       public static final double kPeakOutput = 1.0;
-      public static final double kCruise = 1000;
-      public static final double kAccel = 700;
+      public static final double kCruise = 1500;
+      public static final double kAccel = 2000  ;
       // public final PIDGains gains = new PIDGains(kP, kI, kD, kF, kIZone, kNeutralDeadband, kPeakOutput, kCruise, kAccel);
     }      
     public class Motor2 {
@@ -108,7 +108,7 @@ public class Constants {;
     public class Extend {
       public static final int motorId = IDs.TalonSRX.armExtendControllerId;
       public static final boolean isInverted = false;
-      public static final boolean sensorPhase = false;
+      public static final boolean sensorPhase = true;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
       //PID Tuning
       public static final double kP = 0.2;
@@ -120,6 +120,7 @@ public class Constants {;
       public static final double kPeakOutput = 1.0;
       public static final double kCruise = 1000;
       public static final double kAccel = 2000;
+      
       // public final PIDGains gains = new PIDGains(kP, kI, kD, kF, kIZone, kNeutralDeadband, kPeakOutput, kCruise, kAccel);
       public class Positions { 
         public static final double ScoreHigh = 13200;
@@ -128,6 +129,7 @@ public class Constants {;
         public static final double Floor = 12000;
         public static final double Home = 0;
         public static final double SoftFwdLimit = 14500;
+        
       }
     }         
   }
@@ -166,6 +168,8 @@ public class Constants {;
     public static final int RB = 6; 
     public static final int B = 2; 
     public static final int A = 1; 
+    public static final int RT = 3;
+    
    } 
 
     public class Controls {
@@ -178,6 +182,12 @@ public class Constants {;
     public static final int armHPShelf = Xbox.B;
     public static final int armFloor = Xbox.A;
   }
+
+    public class Auton {
+        public static final boolean isDisabled = false;
+        public static final String autonName = "Basic"; //Basic, ShootAndScoot, or None, case-sensitive
+        public static final double kAutonDriveSpeed = 0.6; //drive speed during auton percentage
+    }
 
 }
 
