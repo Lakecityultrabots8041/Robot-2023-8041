@@ -25,8 +25,10 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.Gripper;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -61,6 +63,7 @@ public class Robot extends TimedRobot {
   private double m_extendDelay = 0.0;
   private double m_armDownTarget = 0.0;
   private double m_armDownDelay = 1.0;
+  
   
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -183,29 +186,39 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_timer.reset();
-    m_timer.start();
+   
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+    m_timer.reset();
+    m_timer.start();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        if (Math.abs(m_gyro.getPitch())>=3.5) {
-          double speed = Math.copySign(0.2,m_gyro.getPitch());
-          drive.tankDrive(speed,speed);
+    if (!Constants.Auton.isDisabled) {
+      switch (Constants.Auton.autonName) {            case "Basic": //Basic Auton
+         /*  if (m_timer.get() < 3.0) { // 3 seconds
+           armRotate(0.3);  } 
+          else if (m_timer.get()>= 3.0 && m_timer.get()<=7.0) {   
+            m_extend.set(ControlMode.MotionMagic,Constants.Arm.Extend.Positions.ScoreHigh);
+          } 
+          else if (m_timer.get() >= 7.0 && m_timer.get() <= 9) 
+          {m_gripper.set(DoubleSolenoid.Value.kForward);}
+            else if (m_timer.get()>= 9 && m_timer.get() <= 14)*/
+            if (m_timer.get() < 4.0) { //2 seconds
+              drive.arcadeDrive(-Constants.Auton.kAutonDriveSpeed, 0.0); 
+          break;     
         }
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
-  }
+          
+      
+        
+    }}}// add } later 
+        
+     
+    
+  
 
   /** This function is called once when teleop is enabled. */
   @Override
@@ -220,8 +233,6 @@ public class Robot extends TimedRobot {
       OI.deadband(joy.getRawAxis(Constants.Xbox.RightJoystick)) * Constants.DriveTrain.kSpeedMult,
       OI.deadband(joy.getRawAxis(Constants.Xbox.LeftJoyStick)) * Constants.DriveTrain.kTurnMult 
     );
-    
-    
     
 
     //Handle shifting the drivetrain
@@ -242,69 +253,75 @@ public class Robot extends TimedRobot {
       m_gripper.set(DoubleSolenoid.Value.kReverse);
     }
 
-    //Handle moving the arm
-    if(m_armTimer.get()>=1.5) {
-      m_arm1.set(ControlMode.Disabled, 0.0);
+    armRotate(joy.getRawAxis(3) - joy.getRawAxis(2));
+     //Handle moving the arm
+     if(m_armTimer.get()>=1.5) {
+       m_arm1.set(ControlMode.Disabled, 0.0);
       m_armTimer.stop();
       m_armTimer.reset();
-    }
-    if(m_armDownTimer.get()>=m_armDownDelay) {
-      m_arm1.set(ControlMode.MotionMagic, m_armDownTarget);
+     }
+     if(m_armDownTimer.get()>=m_armDownDelay) {
+       m_arm1.set(ControlMode.MotionMagic, m_armDownTarget);
       m_armTimer.reset();
       m_armTimer.start();
       m_armDownTimer.stop();
       m_armDownTimer.reset();
+     }
+     if(m_extendTimer.get()>=m_extendDelay) {
+       m_extend.set(ControlMode.MotionMagic, m_extendTarget);
+       m_extendTimer.stop();
+       m_extendTimer.reset();
     }
-    if(m_extendTimer.get()>=m_extendDelay) {
-      m_extend.set(ControlMode.MotionMagic, m_extendTarget);
-      m_extendTimer.stop();
-      m_extendTimer.reset();
-    }
-    if(joy.getRawButtonPressed(Constants.Controls.armDown)) {
-      System.out.println("teleopPeriodic: Arm Down");
-      // m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.Home);
-      m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.Home);
+     if(joy.getRawButtonPressed(Constants.Controls.armDown)) {
+       System.out.println("teleopPeriodic: Arm Down");
+       // m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.Home);
+     m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.Home);
       // m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.Floor);
       m_armDownTarget = Constants.Arm.Extend.Positions.Home;
-      m_armDownDelay = 1.0;
-      m_armDownTimer.reset();
-      m_armDownTimer.start();
-    } else if (joy.getRawButtonPressed(Constants.Controls.armScoreHigh)) {
-      System.out.println("teleopPeriodic: Scoring High");
-      m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.ScoreHigh);
-      m_extendTarget = Constants.Arm.Extend.Positions.ScoreHigh;
-      m_extendDelay = 1.0;
+       m_armDownDelay = 1.0;
+       m_armDownTimer.reset();
+       m_armDownTimer.start();
+     } else if (joy.getRawButtonPressed(Constants.Controls.armScoreHigh)) {
+       System.out.println("teleopPeriodic: Scoring High");
+       //m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.ScoreHigh);
+       m_extendTarget = Constants.Arm.Extend.Positions.ScoreHigh;
+       m_extendDelay = 1.0;
       m_extendTimer.reset();
       m_extendTimer.start();
-      // m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.ScoreHigh);
-    } else if(joy.getRawButtonPressed(Constants.Controls.armScoreLow)) {
-      System.out.println("teleopPeriodic: Scoring Low");
-      m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.ScoreLow);
-      m_extendTarget = Constants.Arm.Extend.Positions.ScoreLow;
-      m_extendDelay = 1.0;
-      m_extendTimer.reset();
-      m_extendTimer.start();
-      // m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.ScoreLow);
-    } else if(joy.getRawButtonPressed(Constants.Controls.armFloor)) {
+       m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.ScoreHigh);
+     } else if(joy.getRawButtonPressed(Constants.Controls.armScoreLow)) {
+       System.out.println("teleopPeriodic: Scoring Low");
+       //m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.ScoreLow);
+       m_extendTarget = Constants.Arm.Extend.Positions.ScoreLow;
+       m_extendDelay = 1.0;
+       m_extendTimer.reset();
+       m_extendTimer.start();
+        m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.ScoreLow);
+     } else if(joy.getRawButtonPressed(Constants.Controls.armFloor)) {
       System.out.println("teleopPeriodic: Arm To The Floor");
-      m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.Floor);
-      m_extendTarget = Constants.Arm.Extend.Positions.Floor;
-      m_extendDelay = 1.0;
-      m_extendTimer.reset();
-      m_extendTimer.start();
-      // m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.Floor);
-    } else if (joy.getRawButtonPressed(Constants.Controls.armHPShelf)) {
-      System.out.println("teleopPeriodic: FEED ME HUMAN");
-      m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.HPShelf);
-      m_extendTarget = Constants.Arm.Extend.Positions.HPShelf;
-      m_extendDelay = 1.0;
-      m_extendTimer.reset();
-      m_extendTimer.start();
-      // m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.HPShelf);
+     // m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.Floor);
+       m_extendTarget = Constants.Arm.Extend.Positions.Floor;
+       m_extendDelay = 1.0;
+       m_extendTimer.reset();
+       m_extendTimer.start();
+       m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.Floor);
+      } else if (joy.getRawButtonPressed(Constants.Controls.armHPShelf)) {
+       System.out.println("teleopPeriodic: FEED ME HUMAN");
+       //m_arm1.set(ControlMode.MotionMagic, Constants.Arm.Positions.HPShelf);
+       m_extendTarget = Constants.Arm.Extend.Positions.HPShelf;
+       m_extendDelay = 1.0;
+       m_extendTimer.reset();
+       m_extendTimer.start();
+       m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.HPShelf);
+     } 
+    
+    
+   
+
     }
    
     
-  }
+  
   
   /** This function is called once when the robot is disabled. */
   @Override
@@ -334,4 +351,15 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
+
+  // Adjust these to control the arm speed and acceleration
+  private static final double
+    MAX_ARM_ACCELERATION = 12,
+    ARM_VOLTAGE_SCALAR = 8;
+  
+  private final SlewRateLimiter armSpeedFilter = new SlewRateLimiter(
+    MAX_ARM_ACCELERATION, -MAX_ARM_ACCELERATION, 0);
+  public void armRotate (double armSpeed) {
+    m_arm1.setVoltage(armSpeedFilter.calculate(armSpeed * ARM_VOLTAGE_SCALAR));
+  }
 }
