@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.Gripper;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -199,25 +198,26 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     if (!Constants.Auton.isDisabled) {
       switch (Constants.Auton.autonName) {            case "Basic": //Basic Auton
-         /*  if (m_timer.get() < 3.0) { // 3 seconds
-           armRotate(0.3);  } 
-          else if (m_timer.get()>= 3.0 && m_timer.get()<=7.0) {   
+         if (m_timer.get() < 4.0) { // 3 seconds
+           armRotate(0.35);  } 
+          else if (m_timer.get()>= 4.0 && m_timer.get()<=7.0) {   
             m_extend.set(ControlMode.MotionMagic,Constants.Arm.Extend.Positions.ScoreHigh);
+            armRotate(0.0);
           } 
-          else if (m_timer.get() >= 7.0 && m_timer.get() <= 9) 
+          else if (m_timer.get() > 7.0 && m_timer.get() <= 9) 
           {m_gripper.set(DoubleSolenoid.Value.kForward);}
-            else if (m_timer.get()>= 9 && m_timer.get() <= 14)*/
-            if (m_timer.get() < 4.0) { //2 seconds
-              drive.arcadeDrive(-Constants.Auton.kAutonDriveSpeed, 0.0); 
+            else if (m_timer.get()> 9 && m_timer.get() <= 11)
+              drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); 
+              else {drive.arcadeDrive(0.0, 0.0);}
           break;     
-        }
+        
           
       
         
     }}}// add } later 
         
      
-    
+       
   
 
   /** This function is called once when teleop is enabled. */
