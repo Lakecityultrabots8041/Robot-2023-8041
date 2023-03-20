@@ -107,8 +107,8 @@ public class Constants {;
     }   
     public class Extend {
       public static final int motorId = IDs.TalonSRX.armExtendControllerId;
-      public static final boolean isInverted = false;
-      public static final boolean sensorPhase = true;
+      public static final boolean isInverted = true;
+      public static final boolean sensorPhase = false;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
       //PID Tuning
       public static final double kP = 0.2;
