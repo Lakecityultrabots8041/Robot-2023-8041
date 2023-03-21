@@ -25,8 +25,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
+//import edu.wpi.first.cameraserver.CameraServer;
+//import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 
 /**
@@ -72,8 +72,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     //Setup the Talons every robot init
     LiveWindow.disableAllTelemetry();
-    UsbCamera camera = CameraServer.startAutomaticCapture();
-    camera.setResolution(320, 240);
+   // UsbCamera camera = CameraServer.startAutomaticCapture();
+   // camera.setResolution(320, 240);
 
     //Left Master
     driveTopLeft.configFactoryDefault();
@@ -231,7 +231,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() { 
     drive.arcadeDrive(
       OI.deadband(joy.getRawAxis(Constants.Xbox.RightJoystick)) * Constants.DriveTrain.kSpeedMult,
-      OI.deadband(joy.getRawAxis(Constants.Xbox.LeftJoyStick)) * Constants.DriveTrain.kTurnMult 
+      OI.deadband(joy.getRawAxis(Constants.Xbox.RightLRJoystick)) * Constants.DriveTrain.kTurnMult 
     );
     
 
@@ -314,8 +314,12 @@ public class Robot extends TimedRobot {
        m_extendTimer.start();
        m_extend.set(ControlMode.MotionMagic, Constants.Arm.Extend.Positions.HPShelf);
      } 
-    
-    
+      if (m_arm1.getSelectedSensorPosition()<65000) {
+        m_extend.set(0.0);
+      }
+      else{
+        
+      }
    
 
     }
