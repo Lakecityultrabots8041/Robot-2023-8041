@@ -72,8 +72,8 @@ public class Constants {;
     public class Motor1 {
       //Talon Tuning
       public static final int motorId = IDs.TalonFX.armControllerId1;
-      public static final boolean isInverted = true;
-      public static final boolean sensorPhase = true;
+      public static final boolean isInverted = false;
+      public static final boolean sensorPhase = false;
       // public final TalonConstants constants = new TalonConstants(motorId, sensorPhase, isInverted);
       //PID Tuning
       public static final double kP = 2.0;
