@@ -173,8 +173,8 @@ public class Constants {;
    } 
 
     public class Controls {
-    public static final int driveShiftHigh = Xbox.LB;
-    public static final int driveShiftLow = Xbox.RB;
+    public static final int driveShiftHigh = Xbox.RB;
+    public static final int driveShiftLow = Xbox.LB;
     public static final int gripperActuate = Xbox.BackRight;
     public static final int armDown = Xbox.BackLeft;
     public static final int armScoreHigh = Xbox.Y;
