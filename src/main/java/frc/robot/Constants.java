@@ -35,8 +35,8 @@ public class Constants {;
 
     //Solenoids
     public class Air {
-      public static final int driveShiftHighId = 2;
-      public static final int driveShiftLowId = 0;
+      public static final int driveShiftHighId = 0;
+      public static final int driveShiftLowId = 2;
       public static final int gripperOpenSolenoidId = 6;
       public static final int gripperClosedSolenoidId = 4;
     }
