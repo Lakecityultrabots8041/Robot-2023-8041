@@ -122,8 +122,9 @@ public class Robot extends TimedRobot {
     m_arm1.config_kD(0, Constants.Arm.Motor1.kD, 30);
     m_arm1.configMotionCruiseVelocity(Constants.Arm.Motor1.kCruise, 30);
     m_arm1.configMotionAcceleration(Constants.Arm.Motor1.kAccel, 30);
-    m_arm1.configForwardSoftLimitThreshold(21100);
-    m_arm1.configReverseSoftLimitThreshold(50);
+    m_arm1.configForwardSoftLimitThreshold(21100,0);
+    m_arm1.configReverseSoftLimitThreshold(200, 0);
+    
     //Arm Follower
     m_arm2.configFactoryDefault();
     m_arm2.set(TalonFXControlMode.Follower,m_arm1.getDeviceID());  
