@@ -210,7 +210,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     if (!Constants.Auton.isDisabled) {
       switch (Constants.Auton.autonName) {            
-        case "Basic": //Basic Auton
+        case "Right Side": //Right Side of the fields 
          if (m_timer.get() < 4.0) { // 3 seconds
            armRotate(0.35);  } 
           else if (m_timer.get()>= 4.0 && m_timer.get()<=7.0) {   
@@ -221,13 +221,14 @@ public class Robot extends TimedRobot {
           {m_gripper.set(DoubleSolenoid.Value.kForward);}
             else if (m_timer.get()> 9 && m_timer.get() <= 11)
               drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); 
-           /*  else if(m_gyro.getYaw() < 180) {
-              driveTopLeft.set(0.3);
-              driveTopRight.set(-0.3);*/
+              else if(m_gyro.getYaw() < 180) {
+              driveTopLeft.set(-0.225);
+              driveTopRight.set(0.225);
+              armRotate(-0.75);
               
 
             
-          break;   
+          break;  } 
           
           case "autoBalance":
             
@@ -286,10 +287,26 @@ public class Robot extends TimedRobot {
            {m_gripper.set(DoubleSolenoid.Value.kForward);}
              else if (m_timer.get()> 9 && m_timer.get() <= 12)
                drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); 
+
+               case "left Side of field ": //Basic Auton
+         if (m_timer.get() < 4.0) { // 3 seconds
+           armRotate(0.35);  } 
+          else if (m_timer.get()>= 4.0 && m_timer.get()<=7.0) {   
+            m_extend.set(ControlMode.MotionMagic,Constants.Arm.Extend.Positions.ScoreHigh);
+            armRotate(0.0);
+          } 
+          else if (m_timer.get() > 7.0 && m_timer.get() <= 9) 
+          {m_gripper.set(DoubleSolenoid.Value.kForward);}
+            else if (m_timer.get()> 9 && m_timer.get() <= 11)
+              drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); 
+            else if(m_gyro.getYaw() < 180) {
+              driveTopLeft.set(0.225);
+              driveTopRight.set(-0.225);
+              armRotate(-0.75);
           
       
         
-    }}}// add } later 
+    }}}}// add } later 
         
      
        public void autoBalanceFast(){
