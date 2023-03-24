@@ -46,7 +46,7 @@ public class Constants {;
     //DriveTrain 
     public class DriveTrain {
       public static final double kSpeedMult = 1.0; // slow down math boy 
-      public static final double kTurnMult = 1.0; //reduce rate of turn
+      public static final double kTurnMult = .80; //reduce rate of turn
       public class Left{
         public static final boolean isInverted = false; //invert left side
       } 
