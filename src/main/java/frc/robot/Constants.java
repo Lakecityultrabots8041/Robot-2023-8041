@@ -170,6 +170,7 @@ public class Constants {;
     public static final int A = 1; 
     public static final int RT = 3;
     public static final int RightLRJoystick = 0;
+    public static final int Sharebutton = 7;
    } 
 
     public class Controls {
