@@ -191,6 +191,9 @@ public class Robot extends TimedRobot {
    * below with additional strings. If using the SendableChooser make sure to add them to the
    * chooser code above as well.
    */
+
+  int step;
+
   @Override
   public void autonomousInit() {
    
@@ -199,13 +202,15 @@ public class Robot extends TimedRobot {
     System.out.println("Auto selected: " + m_autoSelected);
     m_timer.reset();
     m_timer.start();
+    step = 0;
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
     if (!Constants.Auton.isDisabled) {
-      switch (Constants.Auton.autonName) {            case "Basic": //Basic Auton
+      switch (Constants.Auton.autonName) {            
+        case "Basic": //Basic Auton
          if (m_timer.get() < 4.0) { // 3 seconds
            armRotate(0.35);  } 
           else if (m_timer.get()>= 4.0 && m_timer.get()<=7.0) {   
@@ -216,24 +221,90 @@ public class Robot extends TimedRobot {
           {m_gripper.set(DoubleSolenoid.Value.kForward);}
             else if (m_timer.get()> 9 && m_timer.get() <= 11)
               drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); 
-            else if(m_gyro.getYaw() < 180) {
+           /*  else if(m_gyro.getYaw() < 180) {
               driveTopLeft.set(0.3);
-              driveLeftFront.follow(driveTopLeft);
-              driveLeftRear.follow(driveTopLeft);
-              driveTopRight.set(-0.3);
-              driveRightFront.follow(driveTopRight);
-              driveRightRear.follow(driveTopRight);
+              driveTopRight.set(-0.3);*/
+              
 
+            
+          break;   
+          
+          case "autoBalance":
+            
+          if (step == 0){
+
+            drive.tankDrive(0, 0);
+
+            if (m_timer.get() < 4.0) { // 3 seconds
+              armRotate(0.35);  } 
+             else if (m_timer.get()>= 4.0 && m_timer.get()<=7.0) {   
+               m_extend.set(ControlMode.MotionMagic,Constants.Arm.Extend.Positions.ScoreHigh);
+               armRotate(0.0);
+             } 
+             else if (m_timer.get() > 7.0 && m_timer.get() <= 9) 
+             {m_gripper.set(DoubleSolenoid.Value.kForward);}
+
+               else if (m_timer.get()> 9){
+                step++;
+                m_timer.reset();
+                m_timer.start();
+                m_extend.set(ControlMode.MotionMagic,Constants.Arm.Extend.Positions.Home);
+               }
+
+
+          }
+
+          if (step == 1){
+            drive.tankDrive(-0.5, -0.5);
+            if (m_timer.get() > 3){
+              step++;
+              m_timer.reset();
+              m_timer.start();
             }
-          break;     
-        
+          }
+
+          if (step == 2){
+            autoBalanceFast();
+            if (Math.abs(m_gyro.getPitch()) < 5){
+              step ++;
+            }
+          }
+
+          if (step == 3){
+            autoBalanceSlow();
+          }
+
+          break;
+          case "Bump": //Basic Auton
+          if (m_timer.get() < 4.0) { // 3 seconds
+            armRotate(0.35);  } 
+           else if (m_timer.get()>= 4.0 && m_timer.get()<=7.0) {   
+             m_extend.set(ControlMode.MotionMagic,Constants.Arm.Extend.Positions.ScoreHigh);
+             armRotate(0.0);
+           } 
+           else if (m_timer.get() > 7.0 && m_timer.get() <= 9) 
+           {m_gripper.set(DoubleSolenoid.Value.kForward);}
+             else if (m_timer.get()> 9 && m_timer.get() <= 12)
+               drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); 
           
       
         
     }}}// add } later 
         
      
-       
+       public void autoBalanceFast(){
+
+        double outPut = m_gyro.getPitch() * 0.04; 
+
+        drive.tankDrive(outPut, outPut);
+       }
+
+       public void autoBalanceSlow(){
+
+        double outPut = m_gyro.getPitch() * 0.02; 
+
+        drive.tankDrive(outPut, outPut);
+       }
   
 
   /** This function is called once when teleop is enabled. */
@@ -267,6 +338,8 @@ public class Robot extends TimedRobot {
     } else if (joy.getRawButtonReleased(Constants.Controls.gripperActuate)) {
       System.out.println("teleopPeriodic: Close Gripper");
       m_gripper.set(DoubleSolenoid.Value.kReverse);
+    } if (joy.getRawButtonPressed(Constants.Xbox.Sharebutton)){
+      autoBalanceSlow();
     }
 
     armRotate(joy.getRawAxis(3) - joy.getRawAxis(2));
@@ -335,8 +408,13 @@ public class Robot extends TimedRobot {
       }
       else{
         
+        }
+      
+      if (joy.getRawButtonPressed(Constants.Xbox.Sharebutton)){
+        autoBalanceSlow();
+        
       }
-   
+      
 
     }
    
