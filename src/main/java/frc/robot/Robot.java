@@ -288,9 +288,11 @@ public class Robot extends TimedRobot {
           {m_gripper.set(DoubleSolenoid.Value.kForward);}
             else if (m_timer.get()> 9 && m_timer.get() <= 12.5)        
               drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); 
-           else {}
-              break;
-            case  "Left Side Blue":
+           else {
+            drive.arcadeDrive(0.0, 0.0);
+           }
+              break;}}
+            /*case  "Left Side Blue":
               if (m_timer.get() < 4.0) { // 3 seconds
                 armRotate(0.35);  } 
                else if (m_timer.get()>= 4.0 && m_timer.get()<=7.0) {   
@@ -341,7 +343,7 @@ public class Robot extends TimedRobot {
 
         double outPut = m_gyro.getPitch() * 0.02; 
 
-        drive.tankDrive(outPut, outPut);
+        drive.tankDrive(outPut, outPut); */
        }
   
 
@@ -376,9 +378,9 @@ public class Robot extends TimedRobot {
     } else if (joy.getRawButtonReleased(Constants.Controls.gripperActuate)) {
       System.out.println("teleopPeriodic: Close Gripper");
       m_gripper.set(DoubleSolenoid.Value.kReverse);
-    } if (joy.getRawButtonPressed(Constants.Xbox.Sharebutton)){
-      autoBalanceSlow();
-    }
+    } //if (joy.getRawButtonPressed(Constants.Xbox.Sharebutton)){
+      //autoBalanceSlow();
+    
 
     armRotate(joy.getRawAxis(3) - joy.getRawAxis(2));
      //Handle moving the arm
@@ -448,13 +450,13 @@ public class Robot extends TimedRobot {
         
         }
       
-      if (joy.getRawButtonPressed(Constants.Xbox.Sharebutton)){
-        autoBalanceSlow();
+     // if (joy.getRawButtonPressed(Constants.Xbox.Sharebutton)){
+      //  autoBalanceSlow();
         
       }
       
 
-    }
+    
    
     
   
