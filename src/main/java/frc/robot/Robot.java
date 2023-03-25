@@ -219,18 +219,19 @@ public class Robot extends TimedRobot {
           } 
           else if (m_timer.get() > 7.0 && m_timer.get() <= 9) 
           {m_gripper.set(DoubleSolenoid.Value.kForward);}
-            else if (m_timer.get()> 9 && m_timer.get() <= 11)
-              drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); 
-              else if(m_gyro.getYaw() < 180) {
-              driveTopLeft.set(-0.225);
-              driveTopRight.set(0.225);
-              armRotate(-0.75);
+            else if (m_timer.get()> 9 && m_timer.get() <= 11){
+            m_extend.set(ControlMode.MotionMagic,Constants.Arm.Extend.Positions.Home);
+              drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); } 
+             else// if(m_gyro.getYaw() < 180 && m_timer.get() <15)  {
+              //driveTopLeft.set(-0.225);
+              //driveTopRight.set(0.225);
+              //armRotate(-0.75);
               
 
-            
-          break;  } 
+              
+          break;  
           
-          case "autoBalance":
+         /*  case "autoBalance":
             
           if (step == 0){
 
@@ -275,20 +276,8 @@ public class Robot extends TimedRobot {
             autoBalanceSlow();
           }
 
-          break;
-          case "Bump": //Basic Auton
-          if (m_timer.get() < 4.0) { // 3 seconds
-            armRotate(0.35);  } 
-           else if (m_timer.get()>= 4.0 && m_timer.get()<=7.0) {   
-             m_extend.set(ControlMode.MotionMagic,Constants.Arm.Extend.Positions.ScoreHigh);
-             armRotate(0.0);
-           } 
-           else if (m_timer.get() > 7.0 && m_timer.get() <= 9) 
-           {m_gripper.set(DoubleSolenoid.Value.kForward);}
-             else if (m_timer.get()> 9 && m_timer.get() <= 12)
-               drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); 
-
-               case "left Side of field ": //Basic Auton
+          break;}*/
+               case "Bump": //Basic Auton
          if (m_timer.get() < 4.0) { // 3 seconds
            armRotate(0.35);  } 
           else if (m_timer.get()>= 4.0 && m_timer.get()<=7.0) {   
@@ -297,13 +286,45 @@ public class Robot extends TimedRobot {
           } 
           else if (m_timer.get() > 7.0 && m_timer.get() <= 9) 
           {m_gripper.set(DoubleSolenoid.Value.kForward);}
-            else if (m_timer.get()> 9 && m_timer.get() <= 11)
+            else if (m_timer.get()> 9 && m_timer.get() <= 12.5)        
               drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); 
-            else if(m_gyro.getYaw() < 180) {
-              driveTopLeft.set(0.225);
-              driveTopRight.set(-0.225);
+           else {}
+              break;
+            case  "Left Side Blue":
+              if (m_timer.get() < 4.0) { // 3 seconds
+                armRotate(0.35);  } 
+               else if (m_timer.get()>= 4.0 && m_timer.get()<=7.0) {   
+                 m_extend.set(ControlMode.MotionMagic,Constants.Arm.Extend.Positions.ScoreHigh);
+                 armRotate(0.0);
+               } 
+               else if (m_timer.get() > 7.0 && m_timer.get() <= 9) 
+               {m_gripper.set(DoubleSolenoid.Value.kForward);}
+                 else if (m_timer.get()> 9 && m_timer.get() <= 12)
+                   drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); 
+                 else if(m_gyro.getYaw() < 180) {
+                   driveTopLeft.set(0.225);
+                   driveTopRight.set(-0.225);
+                   armRotate(-0.75);
+                   break;}
+                   case "Right Side Red"://Right Side of the fields 
+         if (m_timer.get() < 4.0) { // 3 seconds
+           armRotate(0.35);  } 
+          else if (m_timer.get()>= 4.0 && m_timer.get()<=7.0) {   
+            m_extend.set(ControlMode.MotionMagic,Constants.Arm.Extend.Positions.ScoreHigh);
+            armRotate(0.0);
+          } 
+          else if (m_timer.get() > 7.0 && m_timer.get() <= 9) 
+          {m_gripper.set(DoubleSolenoid.Value.kForward);}
+            else if (m_timer.get()> 9 && m_timer.get() <= 12)
+              drive.arcadeDrive(Constants.Auton.kAutonDriveSpeed, 0.0); 
+              else if(m_gyro.getYaw() < 180) { 
+              driveTopLeft.set(-0.225);
+              driveTopRight.set(0.225);
               armRotate(-0.75);
-          
+              
+
+            
+          break; 
       
         
     }}}}// add } later 
